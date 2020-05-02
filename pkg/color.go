@@ -17,5 +17,14 @@ func GetTextColor(c colorful.Color) colorful.Color{
 		color,_ := colorful.Hex("#FFFFFF")
 		return color
 	}
-
 }
+
+func GetTriadColor(c colorful.Color) (colorful.Color,colorful.Color,colorful.Color){
+	h,s,v := c.Hsv()
+	colorOne := c
+	colorTwo := colorful.Hsv(h+120.0,s,v)
+	colorThree := colorful.Hsv(h-120.0,s,v)
+	return colorOne,colorTwo,colorThree
+}
+
+

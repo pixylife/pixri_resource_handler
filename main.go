@@ -11,4 +11,5 @@ func main(){
 color,_ := colorful.Hex("#9c64a6")
 	c := pkg.GetTextColor(color)
 	fmt.Println(c.Hex())
+	fmt.Println(color.Hsv())
 }
