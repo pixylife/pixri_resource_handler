@@ -37,5 +37,8 @@ color,_ := colorful.Hex("#ff0a2f")
 
 	pkg.GetSlitComplementaryColor(d1,d2)
 
+	fmt.Println("Mono")
+	pkg.GetMonochromaticSaturationColor(color)
+	pkg.GetMonochromaticValueColor(color)
 
 }
