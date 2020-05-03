@@ -1,7 +1,9 @@
 package pkg
 
 import (
+	"fmt"
 	"github.com/lucasb-eyer/go-colorful"
+	"math"
 )
 
 func ColorBlend(c1 colorful.Color,c2 colorful.Color,variation int) colorful.Color{
@@ -21,10 +23,26 @@ func GetTextColor(c colorful.Color) colorful.Color{
 
 func GetTriadColor(c colorful.Color) (colorful.Color,colorful.Color,colorful.Color){
 	h,s,v := c.Hsv()
-	colorOne := c
-	colorTwo := colorful.Hsv(h+120.0,s,v)
-	colorThree := colorful.Hsv(h-120.0,s,v)
-	return colorOne,colorTwo,colorThree
+	c1 := c
+	c2 := colorful.Hsv(math.Mod(h+120,360),s,v)
+	c3 := colorful.Hsv(math.Mod(h-120,360),s,v)
+	return c1,c2,c3
 }
 
+func GetComplementaryColor(c colorful.Color) (colorful.Color,colorful.Color){
+	h,s,v := c.Hsv()
+	c1 := c
+	c2 := colorful.Hsv( math.Mod(h+180,360),s,v)
+	fmt.Println( math.Mod(h+180,360))
+	fmt.Println(c2.Hsv())
+	return c1,c2
+}
+
+func GetSlitComplementaryColor(c1 colorful.Color,c2 colorful.Color) (colorful.Color,colorful.Color,colorful.Color){
+	h,s,v := c2.Hsv()
+	c2 = colorful.Hsv(math.Mod(h-20,360),s,v)
+	c3 := colorful.Hsv(math.Mod(h+20,360),s,v)
+
+	return c1,c2,c3
+}
 
