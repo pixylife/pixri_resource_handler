@@ -67,7 +67,7 @@ const Creative = "#800080"
 const Wise = "#800080"
 const Imaginative = "#800080"
 
-const Romance = "FF007F"
+const Romance = "#FF007F"
 const Mystery   =  "#2B0033"
 
 
