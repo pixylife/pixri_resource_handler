@@ -8,13 +8,13 @@ type Keyword struct {
 }
 type KeywordList []Keyword
 
-func GetMaxKeywords(m map[string]float64) KeywordList{
+func GetMaxKeywords(m KeywordList) KeywordList{
 	pl := make(KeywordList, len(m))
-	i := 0
+	/*i := 0
 	for k, v := range m {
 		pl[i] = Keyword{k, v}
 		i++
-	}
+	}*/
 	sort.Sort(sort.Reverse(pl))
 	return pl
 }

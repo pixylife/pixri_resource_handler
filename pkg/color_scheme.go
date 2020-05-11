@@ -52,8 +52,6 @@ func GetMonochromaticSaturationColor(c colorful.Color)(colorful.Color,colorful.C
 	c2 := colorful.Hsv(h,math.Mod(s-0.15,1),v)
 	c3 := colorful.Hsv(h,math.Mod(s+0.15,1),v)
 
-	fmt.Println(c2.Hex())
-	fmt.Println(c3.Hex())
 
 	return c1,c2,c3
 }
@@ -63,9 +61,12 @@ func GetMonochromaticValueColor(c colorful.Color)(colorful.Color,colorful.Color,
 	c1 := c
 	c2 := colorful.Hsv(h,s,math.Mod(v-0.15,1))
 	c3 := colorful.Hsv(h,s,math.Mod(v+0.15,1))
-
-	fmt.Println(c2.Hex())
-	fmt.Println(c3.Hex())
-
+	
 	return c1,c2,c3
+}
+
+func GetColorBlend(c colorful.Color,mixAmount float64) colorful.Color{
+		clr, _ := colorful.Hex("#0000")
+	c.BlendLab(clr,mixAmount).Hsv()
+	return c
 }
