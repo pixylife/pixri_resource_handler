@@ -66,7 +66,7 @@ func GetMonochromaticValueColor(c colorful.Color)(colorful.Color,colorful.Color,
 }
 
 func GetColorBlend(c colorful.Color,mixAmount float64) colorful.Color{
-		clr, _ := colorful.Hex("#0000")
-	c.BlendLab(clr,mixAmount).Hsv()
-	return c
+	clr, _ := colorful.Hex("#FFFF")
+	color :=c.BlendLab(clr,mixAmount)
+	return color
 }

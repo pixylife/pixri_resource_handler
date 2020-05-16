@@ -1,6 +1,9 @@
 package pkg
 
-import "sort"
+import (
+	"fmt"
+	"sort"
+)
 
 type Keyword struct {
 	Key string
@@ -8,15 +11,10 @@ type Keyword struct {
 }
 type KeywordList []Keyword
 
-func GetMaxKeywords(m KeywordList) KeywordList{
-	pl := make(KeywordList, len(m))
-	/*i := 0
-	for k, v := range m {
-		pl[i] = Keyword{k, v}
-		i++
-	}*/
-	sort.Sort(sort.Reverse(pl))
-	return pl
+func GetMaxKeywords(m *KeywordList) *KeywordList{
+	sort.Sort(sort.Reverse(m))
+	fmt.Println(m)
+	return m
 }
 
 

@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	"github.com/lucasb-eyer/go-colorful"
@@ -10,6 +11,11 @@ import (
 )
 
 const baseUrl = "http://127.0.0.1:5000/"
+
+type Test struct {
+	Success int    `json:"success"`
+	AppName string `json:"app_name"`
+}
 
 type ColorScore struct {
 	Success  int    `json:"success"`
@@ -63,32 +69,34 @@ type ColorScore struct {
 	} `json:"key_words"`
 }
 
-func getColorScore(app_name string, app_desc string) *ColorScore {
+
+
+
+func getColorScore(app_name string, app_desc string) ColorScore{
+//	defer wg.Done()
+
 	client := resty.New()
-	resp, _  := client.R().
+	 resp,_ := client.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody("{\"app_name\":\""+app_name+"\",\"app_desc\":\""+app_desc+"\"}").
-		SetResult(&ColorScore{}).
 		Post(baseUrl)
 
-	fmt.Println(resp.StatusCode())
 
 	if resp.StatusCode() == 200 {
-		fmt.Println(resp.String())
-
-		var result = resp.Result().(*ColorScore)
-		return result
+		data := ColorScore{}
+		_ = json.Unmarshal([]byte(resp.String()), &data)
+		return data
 
 	} else {
-		return nil
+		return ColorScore{}
 	}
-
 }
 
 func mapColorLogic(app_name string, app_desc string) pkg.KeywordList {
 	var keywords = pkg.KeywordList{}
-	col := getColorScore(app_name, app_desc)
-fmt.Println(col.KeyWords)
+
+	col := 	getColorScore(app_name, app_desc)
+
 
 	keywords = append(keywords, pkg.Keyword{Key: "Power", Value: col.KeyWords.Power})
 	keywords = append(keywords, pkg.Keyword{Key: "Importance", Value: col.KeyWords.Importance})
@@ -143,14 +151,16 @@ fmt.Println(col.KeyWords)
 func sortScore(app_name string, app_desc string) pkg.KeywordList {
 	keyList := mapColorLogic(app_name, app_desc)
 
-	keyList = pkg.GetMaxKeywords(keyList)
-
+	pkg.GetMaxKeywords(&keyList)
 	return keyList
 }
 
 func GenerateTheme(app_name string, app_desc string, app_id int) []model.Theme {
 	var themes = []model.Theme{}
 	keyList := sortScore(app_name, app_desc)
+
+	fmt.Println(keyList)
+
 	for i := 0; i < 3; i++ {
 		keyword := keyList[i]
 
@@ -164,10 +174,10 @@ func GenerateTheme(app_name string, app_desc string, app_id int) []model.Theme {
 			var theme = model.Theme{}
 			theme.ApplicationID = app_id
 			if j==0 {
-				theme.PrimaryColor = blendColor.Hex()
-				textColor := pkg.GetTextColor(blendColor)
+				c1,c2,c3 := pkg.GetMonochromaticValueColor(blendColor)
+				theme.PrimaryColor = c1.Hex()
+				textColor := pkg.GetTextColor(c1)
 				theme.TextColorAppBar = textColor.Hex()
-				_, c2, c3 := pkg.GetMonochromaticValueColor(blendColor)
 				theme.SecondaryColor = c2.Hex()
 				theme.BodyColor = "#FFFFFF"
 				color, _ = colorful.Hex(theme.BodyColor)
@@ -176,7 +186,7 @@ func GenerateTheme(app_name string, app_desc string, app_id int) []model.Theme {
 				theme.PrimaryDarkColor = c3.Hex()
 				themes = append(themes,theme)
 			}else if j==1{
-				c1,c2,c3 := pkg.GetMonochromaticValueColor(blendColor)
+				c1,c2,c3 := pkg.GetMonochromaticSaturationColor(blendColor)
 				theme.PrimaryColor = c1.Hex()
 				textColor := pkg.GetTextColor(c1)
 				theme.TextColorAppBar = textColor.Hex()

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"pixri_resource_handler/pkg/generator"
@@ -15,11 +16,11 @@ func GenerateTheme(c echo.Context) error {
 
 	themes := generator.GenerateTheme(application.Name,application.Description,application.ID)
 
+	fmt.Println(themes)
 	return c.JSON(http.StatusOK, themes)
 }
 
 
 func ThemeController(g *echo.Group, contextRoot string) {
-
 	g.POST(contextRoot+"/themes/generate", GenerateTheme)
 }
